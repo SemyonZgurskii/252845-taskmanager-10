@@ -1,5 +1,7 @@
 import {COLORS} from '../const.js';
 
+const MAX_DATE_GAP = 7;
+
 const DescriptionItems = [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`];
 
 const DefaultRepeatingDays = {
@@ -14,6 +16,10 @@ const DefaultRepeatingDays = {
 
 const Tags = [`homework`, `theory`, `practice`, `intensive`, `keks`];
 
+const getBoolean = () => {
+  return Math.random() > 0.5;
+};
+
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
@@ -26,8 +32,8 @@ const getRandomIntegerNumber = (min, max) => {
 
 const getRandomDate = () => {
   const targetDate = new Date();
-  const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffValue = sign * getRandomIntegerNumber(0, 7);
+  const sign = getBoolean() ? 1 : -1;
+  const diffValue = sign * getRandomIntegerNumber(0, MAX_DATE_GAP);
 
   targetDate.setDate(targetDate.getDate() + diffValue);
 
@@ -36,18 +42,18 @@ const getRandomDate = () => {
 
 const generateRepeatingDays = () => {
   return Object.assign({}, DefaultRepeatingDays, {
-    'mo': Math.random() > 0.5,
+    'mo': getBoolean(),
   });
 };
 
 const generateTags = (tags) => {
   return tags
-    .filter(() => Math.random() > 0.5)
+    .filter(() => getBoolean())
     .slice(0, 3);
 };
 
 const generateTask = () => {
-  const dueDate = Math.random() > 0.5 ? null : getRandomDate();
+  const dueDate = getBoolean() ? null : getRandomDate();
 
   return {
     description: getRandomArrayItem(DescriptionItems),
@@ -55,8 +61,8 @@ const generateTask = () => {
     repeatingDays: dueDate ? DefaultRepeatingDays : generateRepeatingDays(),
     tags: new Set(generateTags(Tags)),
     color: getRandomArrayItem(COLORS),
-    isFavorite: Math.random() > 0.5,
-    isArchive: Math.random() > 0.5,
+    isFavorite: getBoolean(),
+    isArchive: getBoolean(),
   };
 };
 
